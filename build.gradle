@@ -3,8 +3,8 @@ plugins {
     id "io.freefair.lombok" version "$lombok_version"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+sourceCompatibility = JavaVersion.VERSION_21
+targetCompatibility = JavaVersion.VERSION_21
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
@@ -22,6 +22,7 @@ dependencies {
     mappings "net.fabricmc:yarn:$yarn_mappings:v2"
     modImplementation "net.fabricmc:fabric-loader:$loader_version"
 
+    modLocalRuntime("net.fabricmc.fabric-api:fabric-api:$fabric_version")
     modLocalRuntime("com.terraformersmc:modmenu:$modmenu_version")
 }
 
@@ -39,7 +40,7 @@ tasks.withType(JavaCompile).configureEach {
     // see http://yodaconditions.net/blog/fix-for-java-file-encoding-problems-with-gradle.html
     it.options.encoding = "UTF-8"
 
-    it.options.release = 17
+    it.options.release = 21
 }
 
 jar {

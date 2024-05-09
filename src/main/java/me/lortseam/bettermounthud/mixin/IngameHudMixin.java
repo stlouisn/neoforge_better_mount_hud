@@ -1,18 +1,21 @@
 package me.lortseam.bettermounthud.mixin;
 
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.network.ClientPlayerEntity;
+import net.minecraft.client.util.Window;
 import net.minecraft.entity.JumpingMount;
 import net.minecraft.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(InGameHud.class)
 public abstract class IngameHudMixin {
-
     @Shadow @Final private MinecraftClient client;
 
     @Shadow
@@ -37,7 +40,7 @@ public abstract class IngameHudMixin {
         return 0;
     }
 
-    @ModifyVariable(method = "renderStatusBars", at = @At(value = "STORE", ordinal = 1), ordinal = 10)
+    @ModifyVariable(method = "renderStatusBars", at = @At(value = "STORE"), ordinal = 11)
     private int bettermounthud$moveAirUp(int y) {
         LivingEntity entity = getRiddenEntity();
         if (entity != null) {
@@ -47,7 +50,7 @@ public abstract class IngameHudMixin {
         return y;
     }
 
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getJumpingMount()Lnet/minecraft/entity/JumpingMount;"))
+    @Redirect(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerEntity;getJumpingMount()Lnet/minecraft/entity/JumpingMount;"))
     private JumpingMount bettermounthud$switchBar(ClientPlayerEntity player) {
         var jumpingMount = player.getJumpingMount();
         if (!client.interactionManager.hasExperienceBar() || client.options.jumpKey.isPressed()
@@ -55,4 +58,17 @@ public abstract class IngameHudMixin {
         return null;
     }
 
+    @Redirect(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;shouldRenderExperience()Z"))
+    private boolean bettermounthud$renderExperienceBar(InGameHud instance) {
+        return client.interactionManager.hasExperienceBar();
+    }
+
+    @Redirect(method = "renderExperienceLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;shouldRenderExperience()Z"))
+    private boolean bettermounthud$renderExperienceLevel(InGameHud instance) {
+        return client.interactionManager.hasExperienceBar() &&
+                ((client.player.getJumpingMount() != null
+                        && !client.options.jumpKey.isPressed()
+                        && client.player.getMountJumpStrength() <= 0)
+                || client.player.getJumpingMount() == null);
+    }
 }
