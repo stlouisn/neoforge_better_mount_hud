@@ -36,12 +36,13 @@ dependencies {
     it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${neoforge_mappings}"
   }
 
-//  // RefMap
-//  loom {
-//    mixin {
-//      defaultRefmapName.set("${archives_base_name}.refmap.json")
-//    }
-//  }
+  // RefMap
+  loom {
+    mixin {
+      mixin.useLegacyMixinAp = true
+      defaultRefmapName.set("${archives_base_name}.refmap.json")
+    }
+  }
 
   // AccessWidener
   loom {
@@ -52,27 +53,9 @@ dependencies {
 
 }
 
-dependencies {
-
-}
-
 java {
   sourceCompatibility = JavaVersion.VERSION_21
   targetCompatibility = JavaVersion.VERSION_21
-
-  manifest {
-    attributes(
-      [
-        "Specification-Title"     : mod_id,
-        "Specification-Vendor"    : mod_authors,
-        "Specification-Version"   : "1",
-        "Implementation-Title"    : mod_name,
-        "Implementation-Version"  : mod_version,
-        "Implementation-Vendor"   : mod_authors,
-        "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-      ]
-    )
-  }
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -87,6 +70,22 @@ processResources {
     filesMatching(it) {
       expand(stringProperties) { escapeBackslash = true }
     }
+  }
+}
+
+jar {
+  manifest {
+    attributes(
+      [
+        "Specification-Title"     : mod_id,
+        "Specification-Vendor"    : mod_authors,
+        "Specification-Version"   : "1",
+        "Implementation-Title"    : mod_name,
+        "Implementation-Version"  : mod_version,
+        "Implementation-Vendor"   : mod_authors,
+        "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+      ]
+    )
   }
 }
 
