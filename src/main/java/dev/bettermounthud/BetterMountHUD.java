@@ -1,14 +1,12 @@
 package dev.bettermounthud;
 
-import net.fabricmc.api.ModInitializer;
+import net.neoforged.fml.common.Mod;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class BetterMountHUD implements ModInitializer {
+@SuppressWarnings("unused")
+@Mod(Constants.MOD_ID)
+public final class BetterMountHUD {
 
-  @SuppressWarnings("unused")
   public static final Logger LOGGER = LoggerFactory.getLogger(Constants.MOD_ID);
-
-  public void onInitialize() {
-  }
 }

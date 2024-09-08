@@ -1,20 +1,24 @@
 plugins {
-  id "fabric-loom" version "${fabric_loom_version}-SNAPSHOT"
+  id "dev.architectury.loom" version "${architectury_loom_version}-SNAPSHOT"
+  id "architectury-plugin" version "${architectury_plugin_version}-SNAPSHOT"
   id "java-library"
+}
+
+architectury {
+  minecraft = minecraft_version
 }
 
 group = maven_group
 version = mod_version
 
 base {
-  archivesName = "${archives_base_name}-${minecraft_version}-fabric"
+  archivesName = "${archives_base_name}-${minecraft_version}-neoforge"
 }
-
 
 repositories {
 
-  // Mod Menu
-  maven { url = "https://maven.terraformersmc.com/" }
+  // neoForge
+  maven { url = "https://maven.neoforged.net/releases" }
 
 }
 
@@ -23,19 +27,21 @@ dependencies {
   // Minecraft
   minecraft "com.mojang:minecraft:${minecraft_version}"
 
-  // Fabric
-  modImplementation "net.fabricmc:fabric-loader:${fabric_loader_version}"
-  modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+  // neoForge
+  neoForge "net.neoforged:neoforge:${neoforge_version}"
 
-  // Mappings - Yarn
-  mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-
-  // RefMap
-  loom {
-    mixin {
-      defaultRefmapName.set("${archives_base_name}.refmap.json")
-    }
+  // Mappings - Yarn + neoForge
+  mappings loom.layered() {
+    it.mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
+    it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${neoforge_mappings}"
   }
+
+//  // RefMap
+//  loom {
+//    mixin {
+//      defaultRefmapName.set("${archives_base_name}.refmap.json")
+//    }
+//  }
 
   // AccessWidener
   loom {
@@ -47,9 +53,6 @@ dependencies {
 }
 
 dependencies {
-
-  // Mod Menu Local-Only
-  modLocalRuntime ("com.terraformersmc:modmenu:${modmenu_version}") { exclude(module: "fabric-api") }
 
 }
 
@@ -80,7 +83,7 @@ tasks.withType(JavaCompile).configureEach {
 processResources {
   def stringProperties = providers.gradlePropertiesPrefixedBy('').get()
   stringProperties.each { inputs.property(it.key, it.value) }
-  ["fabric.mod.json"].each {
+  ["META-INF/neoforge.mods.toml"].each {
     filesMatching(it) {
       expand(stringProperties) { escapeBackslash = true }
     }
