@@ -1,28 +1,40 @@
 {
   "schemaVersion": 1,
-  "id": "bettermounthud",
-  "version": "${version}",
-  "name": "Better Mount HUD",
-  "description": "Improves the ingame HUD while riding a mount",
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name} [C]",
+  "description": "${mod_description}",
   "authors": [
-    "Lortseam"
+    "${mod_authors}"
   ],
-  "icon": "assets/bettermounthud/icon.png",
   "contact": {
-    "email": "lortseam@gmail.com",
-    "sources": "https://github.com/Lortseam/better-mount-hud",
-    "issues": "https://github.com/Lortseam/better-mount-hud/issues"
+    "homepage": "${url_homepage}",
+    "sources": "${url_sources}",
+    "issues": "${url_issues}"
   },
-  "license": "GPL-3.0",
-  "environment": "client",
+  "license": "${mod_license}",
+  "icon": "assets/${mod_id}/icon.png",
+  "environment": "${mod_fabric_environment}",
+  "entrypoints": {
+    "main": [
+      "dev.bettermounthud.BetterMountHUD"
+    ]
+  },
   "mixins": [
-    {
-      "config": "bettermounthud.mixins.json",
-      "environment": "client"
-    }
+    "${mod_id}.mixins.json"
   ],
   "depends": {
-    "java": ">=21",
-    "fabricloader": ">=0.11.3"
+    "fabricloader": ">=${fabric_loader_version}",
+    "minecraft": "${minecraft_version}"
+  },
+  "recommends": {
+    "modmenu": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.${url_homepage_type}": "${url_homepage}"
+      }
+    }
   }
 }

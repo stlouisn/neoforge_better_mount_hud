@@ -1,10 +1,10 @@
 {
   "required": true,
-  "minVersion": "0.8",
-  "package": "me.lortseam.bettermounthud.mixin",
+  "package": "dev.bettermounthud.mixin",
   "compatibilityLevel": "JAVA_21",
+  "minVersion": "0.8.5",
   "client": [
-    "IngameHudMixin"
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
