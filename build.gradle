@@ -17,8 +17,17 @@ base {
 
 repositories {
 
+  // Cloth Config
+  maven { url = "https://maven.shedaniel.me/" }
+
+  // Mixin Extras
+  maven { url = "https://jitpack.io" }
+
   // neoForge
   maven { url = "https://maven.neoforged.net/releases" }
+
+  // Parchment MC
+  maven { url = "https://maven.parchmentmc.org" }
 
 }
 
@@ -30,10 +39,10 @@ dependencies {
   // neoForge
   neoForge "net.neoforged:neoforge:${neoforge_version}"
 
-  // Mappings - Yarn + neoForge
+  // Mappings - Yarn
   mappings loom.layered() {
     it.mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-    it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${neoforge_mappings}"
+    it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${yarn_mappings_patch_neoforge}"
   }
 
   // RefMap
@@ -76,15 +85,15 @@ processResources {
 jar {
   manifest {
     attributes(
-      [
-        "Specification-Title"     : mod_id,
-        "Specification-Vendor"    : mod_authors,
-        "Specification-Version"   : "1",
-        "Implementation-Title"    : mod_name,
-        "Implementation-Version"  : mod_version,
-        "Implementation-Vendor"   : mod_authors,
-        "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
-      ]
+        [
+            "Specification-Title"     : mod_id,
+            "Specification-Vendor"    : mod_authors,
+            "Specification-Version"   : "1",
+            "Implementation-Title"    : mod_name,
+            "Implementation-Version"  : mod_version,
+            "Implementation-Vendor"   : mod_authors,
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ]
     )
   }
 }
