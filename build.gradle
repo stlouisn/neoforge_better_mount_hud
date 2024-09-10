@@ -4,63 +4,27 @@ plugins {
   id "java-library"
 }
 
-architectury {
-  minecraft = minecraft_version
-}
+architectury { minecraft = minecraft_version }
 
 group = maven_group
 version = mod_version
 
-base {
-  archivesName = "${archives_base_name}-${minecraft_version}-neoforge"
-}
+base { archivesName = "${archives_base_name}-${minecraft_version}-neoforge" }
 
-repositories {
-
-  // Cloth Config
-  maven { url = "https://maven.shedaniel.me/" }
-
-  // Mixin Extras
-  maven { url = "https://jitpack.io" }
-
-  // neoForge
-  maven { url = "https://maven.neoforged.net/releases" }
-
-  // Parchment MC
-  maven { url = "https://maven.parchmentmc.org" }
-
-}
+repositories { maven { url = "https://maven.neoforged.net/releases" } }
 
 dependencies {
-
-  // Minecraft
   minecraft "com.mojang:minecraft:${minecraft_version}"
-
-  // neoForge
   neoForge "net.neoforged:neoforge:${neoforge_version}"
-
-  // Mappings - Yarn
-  mappings loom.layered() {
-    it.mappings "net.fabricmc:yarn:${yarn_mappings}:v2"
-    it.mappings "dev.architectury:yarn-mappings-patch-neoforge:${yarn_mappings_patch_neoforge}"
-  }
-
-  // RefMap
-  loom {
-    mixin {
-      mixin.useLegacyMixinAp = true
-      defaultRefmapName.set("${archives_base_name}.refmap.json")
-    }
-  }
-
-  // AccessWidener
   loom {
     if (file("src/main/resources/${archives_base_name}.accesswidener").exists()) {
       accessWidenerPath = file("src/main/resources/${archives_base_name}.accesswidener")
     }
   }
-
 }
+
+apply from: "build-mappings.gradle"
+apply from: "build-dependencies.gradle"
 
 java {
   sourceCompatibility = JavaVersion.VERSION_21
@@ -98,6 +62,4 @@ jar {
   }
 }
 
-remapJar {
-  destinationDirectory.set(file("${rootDir}/files"))
-}
+remapJar { destinationDirectory.set(file("${rootDir}/files")) }
